@@ -1,4 +1,4 @@
-# FireApp
+# FireApp :fire: :fire_engine:
 
 A simple app that monitors fire incidents from different cities and countries.
 
