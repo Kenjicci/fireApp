@@ -12,7 +12,7 @@
                     <i class="flaticon-home"></i>
                 </a>
             </li>
-            <li class"seperator">
+            <li class="seperator">
                 <li class="flaticon-right-arroww"></li>
             </li>
             <li class="nav-item">
@@ -46,8 +46,8 @@
 <script>
     var map = L.map('map').setView([9.81644, 118.72239], 13);
     var truckIcon = L.icon({
-    iconUrl: '../static/img/firetruck.png', // Replace with the path to your red marker icon
-    iconSize: [50, 50], // Adjust the size as needed
+        iconUrl: '/static/img/firetruck.png', // Absolute path
+        iconSize: [38, 38], // Correct size for a marker icon
     });
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -65,13 +65,13 @@
         var latitude = parseFloat(data.latitude);
         var longitude = parseFloat(data.longitude);
 
-        var marker = L.marker([latitude, longitude], { icon: truckIcon }) .addTo(map);
+        var marker = L.marker([latitude, longitude], { icon: truckIcon }).addTo(map);
 
         // create a popup and set its content
-        var popuContent = data.name;
-        var popup = L.popup() .setContent(popuContent);
+        var popupContent = data.name;
+        var popup = L.popup() .setContent(popupContent);
 
-        marker.bindPopup(popuContent);
+        marker.bindPopup(popupContent);
 
         //bind mouseover and mouseout events to the marker
         marker.on ('mouseover', function (e) {
