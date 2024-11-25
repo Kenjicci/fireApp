@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+<div class="page-inner">
+    <div class="page-header">
+        <h4 class="page-title">Fire Incidents Map</h4>
+        <ul class="breadcrumbs">
+            <li class="nav-home">
+                <a href="#">
+                    <i class="flaticon-home"></i>
+                </a>
+            </li>
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a href="#">Maps</a>
+            </li>
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a href="#">Incidents</a>
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-transparent">
+                <div class="card-header">
+                    <h4 class="card-title text-center">Fire Incidents</h4>
+                    <p class="card-category text-center">Interactive map showing fire incidents.</p>
+                </div>
+                <div class="card-body">
+                    <!-- Dropdown for City -->
+                    <div class="col-md-4 ml-auto mr-auto">
+                        <select id="city-filter" class="form-control">
+                            <option value="">Select City</option>
+                            {% for city in cities %}
+                                <option value="{{ city.city }}">{{ city.city }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-10 ml-auto mr-auto">
+                        <div id="map" style="width: 100%; height: 400px"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script>
+    var map = L.map('map').setView([9.81644, 118.72239], 13); 
+
+    var fireIcon = L.icon({
+        iconUrl: "{% static 'img/fire.png' %}",
+        iconSize: [50, 50], 
+    });
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    var incidentData = {{ incidents|safe }};  // Assuming 'incidents' is passed as JSON data to template
+    var markers = [];  
+
+    function updateMap(city) {
+        markers.forEach(function(marker) {
+            map.removeLayer(marker);
+        });
+        markers = []; 
+
+        incidentData.forEach(function(data) {
+            var latitude = parseFloat(data.location__latitude);  
+            var longitude = parseFloat(data.location__longitude);  
+            var incidentCity = data.location__city;  
+
+            if (city === "" || city === incidentCity) {
+                var marker = L.marker([latitude, longitude], { icon: fireIcon }).addTo(map);
+
+                var popupContent = "<b>Incident:</b> " + data.severity_level + "<br><b>Location:</b> " + data.location__name;
+                marker.bindPopup(popupContent);
+
+                marker.on('mouseover', function () {
+                    this.openPopup();
+                });
+                marker.on('mouseout', function () {
+                    this.closePopup();
+                });
+
+                markers.push(marker); 
+            }
+        });
+    }
+
+    // Initialize map with all incidents
+    updateMap("");
+    console.log(incidentData); //debug
+
+    document.getElementById('city-filter').addEventListener('change', function(event) {
+        var selectedCity = event.target.value;
+        updateMap(selectedCity);  
+    });
+</script>
+{% endblock %}
