@@ -312,3 +312,38 @@ class FirefightersDeleteView(DeleteView):
     def form_valid(self, form):
         messages.success(self.request, 'Deleted successfully. ')
         return super().form_valid(form)
+    
+#FIRE TRUCKS
+class FireTruckList(ListView):
+     model =  FireTruck
+     context_object_name = 'firetruck' 
+     template_name = 'Firetruck/firetruck_list.html' 
+     paginate_by = 5
+     
+     def get_queryset(self, *args, **kwargs):
+         qs = super(FireTruckList, self).get_queryset(*args, **kwargs)
+         if self.request.GET.get("q") != None: 
+             query = self.request.GET.get('q') 
+             qs = qs.filter(Q(truck_number__icontains=query) |
+                            Q(model__icontains=query) |
+                            Q(capacity=query) |
+                            Q(station=query))
+         return qs
+     
+#Weather Condition
+class WeatherConditionsList(ListView):
+     model =  WeatherConditions
+     context_object_name = 'weather_conditions' 
+     template_name = 'WeatherCondition/weather_conditions_list.html' 
+     paginate_by = 5
+     
+     def get_queryset(self, *args, **kwargs):
+         qs = super(WeatherConditionsList, self).get_queryset(*args, **kwargs)
+         if self.request.GET.get("q") != None: 
+             query = self.request.GET.get('q') 
+             qs = qs.filter(Q(incident__icontains=query) |
+                            Q(temperature__icontains=query) |
+                            Q(humidity=query) |
+                            Q(wind_speed=query) |
+                            Q(weather_description=query))
+         return qs

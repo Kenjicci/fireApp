@@ -5,6 +5,8 @@ from fire.views import (
     HomePageView, ChartView, PieCountbySeverity, LineCountbyMonth, MultilineIncidentTop3Country, multipleBarbySeverity,
     LocationList, LocationCreateView, LocationUpdateView, LocationDeleteView,
     FirefightersList, FirefightersCreateView, FirefightersUpdateView, FirefightersDeleteView,
+    FireTruckList,
+    WeatherConditionsList,
 )
 from fire import views
 
@@ -19,6 +21,7 @@ urlpatterns = [
     path('stations', views.map_station, name='map-station'),
     path('map_incident/', views.MapIncidentView, name='map-incident'),
     
+    #locations
     path('location_list', LocationList.as_view(), name='location-list'),
     path('location_list/add/', LocationCreateView.as_view(), name='location-add'),
     path('location-list/<int:pk>/delete/', LocationDeleteView.as_view(), name='location-delete'),
@@ -29,5 +32,11 @@ urlpatterns = [
     path('firefighters-list/add/', FirefightersCreateView.as_view(), name='firefighters-add'),
     path('firefighters-list/<pk>/', FirefightersUpdateView.as_view(), name='firefighters-update'),
     path('firefighters-list/<pk>/delete', FirefightersDeleteView.as_view(), name='firefighters-delete'),
+
+    #fire trucks
+    path('firetruck-list/', FireTruckList.as_view(), name='firetruck-list'),
+
+    #weather conditions
+    path('weather-conditions-list/', WeatherConditionsList.as_view(), name='weather-conditions-list'),
 
 ]
