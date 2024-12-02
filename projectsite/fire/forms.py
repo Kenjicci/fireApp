@@ -27,9 +27,6 @@ class FirefightersForm(ModelForm):
     class Meta:
         model = Firefighters
         fields = "__all__"
-        widgets = {
-            'XP_CHOICES': forms.Select(attrs={'class': 'form-control'}),
-        }
 
 class FireTruckForm(ModelForm):
     class Meta:

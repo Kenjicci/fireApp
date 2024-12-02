@@ -60,6 +60,7 @@ class Command(BaseCommand):
 
     def populate_firefighters(self, count):
         fake = Faker()
+        fire_stations = list(FireStation.objects.all())
         xp_choices = [
             'Probationary Firefighter', 'Firefighter I', 'Firefighter II',
             'Firefighter III', 'Driver', 'Captain', 'Battalion Chief'
@@ -69,7 +70,7 @@ class Command(BaseCommand):
                 name=fake.name(),
                 rank=random.choice(['Trainee', 'Senior', 'Commander']),
                 experience_level=random.choice(xp_choices),
-                station=random.choice(xp_choices),
+                station=random.choice(fire_stations),
             )
         self.stdout.write(self.style.SUCCESS(f'{count} Firefighters created successfully.'))
 

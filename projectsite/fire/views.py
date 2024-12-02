@@ -1,23 +1,23 @@
+#querying
 from typing import Any
 from django.db.models.query import QuerySet
-
 from django.db.models.query import Q
+#views
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from fire.forms import LocationsForm, IncidentForm, FireStationForm
+from django.views.generic.list import ListView
+from fire.models import Locations, Incident, FireStation,  Firefighters, FireTruck, WeatherConditions
+from fire.forms import LocationsForm, IncidentForm, FireStationForm, FirefightersForm, FireTruckForm, WeatherConditionsForm
 from django.urls import reverse_lazy
 from django.contrib import messages
-
 from django.shortcuts import render
-from django.views.generic.list import ListView
-from fire.models import Locations, Incident, FireStation
-
+#charts
 from django.db import connection
 from django.http import JsonResponse
 from django.db.models.functions import ExtractMonth
-
 from django.db.models import Count
 from datetime import datetime
 from geopy.distance import geodesic
+
 
 class HomePageView(ListView):
     model = Locations
@@ -247,7 +247,7 @@ class LocationDeleteView(DeleteView):
     success_url = reverse_lazy('location-list')
 
     def form_valid(self, form):
-        messages.success(self.request, 'Delete successfully. ')
+        messages.success(self.request, 'Deleted successfully. ')
         return super().form_valid(form)
     
     
@@ -261,4 +261,54 @@ class LocationUpdateView(UpdateView):
         location_name = form.instance.name
         messages.success(self.request, f'{location_name} has been updated')
 
+        return super().form_valid(form)
+    
+#FIREFIGHTERS
+class FirefightersList(ListView):
+     model =  Firefighters
+     context_object_name = 'firefighters' 
+     template_name = 'Firefighters/firefighters_list.html' 
+     paginate_by = 5
+     
+     def get_queryset(self, *args, **kwargs):
+         qs = super(FirefightersList, self).get_queryset(*args, **kwargs)
+         if self.request.GET.get("q") != None: 
+             query = self.request.GET.get('q') 
+             qs = qs.filter(Q(name__icontains=query) |
+                            Q(rank__icontains=query) |
+                            Q(experience_level__icontains=query) |
+                            Q(station__icontains=query))
+         return qs
+     
+class FirefightersCreateView(CreateView):
+    model = Firefighters
+    form_class = FirefightersForm
+    template_name = 'Firefighters/firefighters_add.html'
+    success_url = reverse_lazy('firefighters-list')
+    
+    def form_valid(self, form):
+        firefighter_name = form.instance.name
+        messages.success(self.request, f'{firefighter_name} has been added. ')
+        
+        return super().form_valid(form)
+    
+class FirefightersUpdateView(UpdateView):
+    model = Firefighters
+    form_class = FirefightersForm
+    template_name = 'Firefighters/firefighters_edit.html'
+    success_url = reverse_lazy('firefighters-list')
+    
+    def form_valid(self, form):
+        firefighters_name = form.instance.name
+        messages.success(self.request, f'{firefighters_name}\'s details have been updated. ')
+
+        return super().form_valid(form)
+    
+class FirefightersDeleteView(DeleteView):
+    model = Firefighters
+    template_name = 'Firefighters/firefighters_del.html'
+    success_url = reverse_lazy('firefighters-list')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Deleted successfully. ')
         return super().form_valid(form)
