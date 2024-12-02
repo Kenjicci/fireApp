@@ -8,6 +8,7 @@ from django.db.models.functions import ExtractMonth
 
 from django.db.models import Count
 from datetime import datetime
+from geopy.distance import geodesic
 
 class HomePageView(ListView):
     model = Locations
@@ -183,3 +184,17 @@ def map_station(request):
      } 
  
      return render(request, 'map_station.html', context)
+ 
+def MapIncidentView(request):
+    incidents = Incident.objects.select_related('location').all().values(
+        'location__latitude', 'location__longitude', 'severity_level', 'location__name', 'location__city'
+    )
+    cities = Locations.objects.values('city').distinct()
+    for incident in incidents:
+        incident['location__latitude'] = float(incident['location__latitude'])
+        incident['location__longitude'] = float(incident['location__longitude'])
+    incidents_list = list(incidents)
+    return render(request, 'map_incident.html', {
+        'incidents': incidents_list,
+        'cities': cities,
+    })
