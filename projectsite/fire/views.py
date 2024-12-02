@@ -1,3 +1,12 @@
+from typing import Any
+from django.db.models.query import QuerySet
+
+from django.db.models.query import Q
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from fire.forms import LocationsForm, IncidentForm, FireStationForm
+from django.urls import reverse_lazy
+from django.contrib import messages
+
 from django.shortcuts import render
 from django.views.generic.list import ListView
 from fire.models import Locations, Incident, FireStation
@@ -198,3 +207,58 @@ def MapIncidentView(request):
         'incidents': incidents_list,
         'cities': cities,
     })
+
+
+# LOCATION
+
+class LocationList(ListView):
+    model = Locations
+    context_object_name = 'location'
+    template_name = "Locations/location_list.html"
+    paginate_by = 5
+    
+    def get_queryset(self, *args, **kwargs):
+        qs = super(LocationList, self).get_queryset(*args, **kwargs)
+        if self.request.GET.get("q") != None:
+            query = self.request.GET.get("q")
+            qs = qs.filter(Q(name__icontains=query) |
+                           Q(latitude__icontains=query) |
+                           Q(longitude__icontains=query) |
+                           Q(address__icontains=query) |
+                           Q(city__icontains=query) |
+                           Q(country__icontains=query))
+        return qs
+    
+class LocationCreateView(CreateView):
+    model = Locations
+    form_class = LocationsForm
+    template_name = 'Locations/location_add.html'
+    success_url = reverse_lazy('location-list')
+    
+    def form_valid(self, form):
+        location_name = form.instance.name
+        messages.success(self.request, f'{location_name} has been added')
+        
+        return super().form_valid(form)
+    
+class LocationDeleteView(DeleteView):
+    model = Locations
+    template_name = 'Locations/location_del.html'
+    success_url = reverse_lazy('location-list')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Delete successfully. ')
+        return super().form_valid(form)
+    
+    
+class LocationUpdateView(UpdateView):
+    model = Locations
+    form_class = LocationsForm
+    template_name = 'Locations/location_edit.html'
+    success_url = reverse_lazy('location-list')
+    
+    def form_valid(self, form):
+        location_name = form.instance.name
+        messages.success(self.request, f'{location_name} has been updated')
+
+        return super().form_valid(form)

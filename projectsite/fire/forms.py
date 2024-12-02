@@ -14,7 +14,7 @@ class IncidentForm(ModelForm):
         fields = "__all__"
         widgets = {
             'severity_level': forms.Select(attrs={'class': 'form-control'}),
-            'date_time': forms.DateTimeInput(attr={'type': 'datetime-local'}),
+            'date_time': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
 
 
@@ -28,7 +28,7 @@ class FirefightersForm(ModelForm):
         model = Firefighters
         fields = "__all__"
         widgets = {
-            'XP_CHOICES': forms.Select(attr={'class': 'form-control'}),
+            'XP_CHOICES': forms.Select(attrs={'class': 'form-control'}),
         }
 
 class FireTruckForm(ModelForm):
