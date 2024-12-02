@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>{% block title %}FireApp{% endblock %}</title>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
-    <link rel="icon" href="{% static 'img/icon.ico' %}" type="image/x-icon" />
+    <link rel="icon" href="{% static 'img/alarm.png' %}" type="image/x-icon" />
 
 
     <!-- Fonts and icons -->
@@ -28,7 +28,7 @@
     <div class="wrapper">
       <div class="main-header">
         <!-- Logo Header -->
-        <div class="logo-header" data-background-color="blue">
+        <div class="logo-header" data-background-color="red">
           <a href="index.html" class="logo">
             <img src="{% static 'img/logo.svg' %}" alt="navbar brand" class="navbar-brand" />
           </a>
@@ -47,7 +47,7 @@
         <!-- End Logo Header -->
 
         <!-- Navbar Header -->
-        <nav class="navbar navbar-header navbar-expand-lg" data-background-color="blue2">
+        <nav class="navbar navbar-header navbar-expand-lg" data-background-color="red2">
           <div class="container-fluid">
             <div class="collapse" id="search-nav">
               
@@ -129,7 +129,7 @@
                </li>
               <li class="nav-item">
                 <a href="{% url 'firefighters-list' %}">
-                  <img src="{% static 'img/fireman.png' %}" alt="Fire Fighters Icon" style="width:20px; height:20px;  margin-right:10px">
+                  <img src="{% static 'img/firefighter.png' %}" alt="Fire Fighters Icon" style="width:20px; height:20px;  margin-right:10px">
                   <p>Fire Fighters</p>
                 </a>
               </li>
