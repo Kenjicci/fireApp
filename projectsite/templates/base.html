@@ -23,9 +23,6 @@
     <!-- CSS Files -->
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
     <link rel="stylesheet" href="{% static 'css/atlantis.min.css' %}" />
-
-    <!-- CSS Just for demo purpose, don't include it in your project -->
-    <link rel="stylesheet" href="{% static 'css/demo.css' %}" />
   </head>
   <body>
     <div class="wrapper">
@@ -106,45 +103,45 @@
               </div>
             </div>
             <ul class="nav nav-primary">
-              <li class="nav-item active">
+              <li class="nav-item">
                 <a href="{% url 'dashboard-chart' %}">
-                  <img src="{% static 'img/dashboard.png' %}" alt="Dashboard Icon" style="width:20px; height:20px;">
+                  <img src="{% static 'img/data-governance.png' %}" alt="Dashboard Icon" style="width:20px; height:20px; margin-right:10px">
                   <p>Dashboard</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{% url 'location-list' %}">
-                  <img src="{% static 'img/location.png' %}" alt="Location Icon" style="width:20px; height:20px;">
+                  <img src="{% static 'img/map.png' %}" alt="Location Icon" style="width:23px; height:23px; margin-right:10px">
                   <p>Location</p> 
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{% url 'map-incident' %}">
-                  <img src="{% static 'img/incidenticon.png' %}" alt="Incident Icon" style="width:20px; height:20px;">
+                  <img src="{% static 'img/warning.png' %}" alt="Incident Icon" style="width:20px; height:20px; margin-right:10px">
                   <p>Incident</p> 
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{% url 'map-station' %}">
-                  <img src="{% static 'img/firestationicon.png' %}" alt="Fire Station Icon" style="width:20px; height:20px;">
+                  <img src="{% static 'img/fire-station.png' %}" alt="Fire Station Icon" style="width:20px; height:20px;  margin-right:10px">
                   <p>Fire Station</p> 
                 </a>
                </li>
               <li class="nav-item">
                 <a href="{% url 'firefighters-list' %}">
-                  <img src="{% static 'img/firefightersicon.png' %}" alt="Fire Fighters Icon" style="width:20px; height:20px;">
+                  <img src="{% static 'img/fireman.png' %}" alt="Fire Fighters Icon" style="width:20px; height:20px;  margin-right:10px">
                   <p>Fire Fighters</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="#">
-                  <img src="{% static 'img/firetruckicon.png' %}" alt="Fire Truck Icon" style="width:20px; height:20px;">
+                  <img src="{% static 'img/firetruck.png' %}" alt="Fire Truck Icon" style="width:20px; height:20px;  margin-right:10px">
                   <p>Fire Truck</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="#">
-                  <img src="{% static 'img/weathericon.png' %}" alt="Weather Condition Icon" style="width:20px; height:20px;">
+                  <img src="{% static 'img/atmospheric-conditions.png' %}" alt="Weather Condition Icon" style="width:20px; height:20px; margin-right:10px">
                   <p>Weather Condition</p>
                 </a>
               </li>
