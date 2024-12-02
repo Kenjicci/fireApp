@@ -1,19 +1,48 @@
 from django.shortcuts import render
 from django.views.generic.list import ListView
-from fire.models import Locations, Incident, FireStation
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from fire.models import Locations, Incident, FireStation, Firefighters, FireTruck, WeatherConditions
+from fire.forms import LocationsForm, IncidentForm, FireStationForm, FirefightersForm, FireTruckForm, WeatherConditionsForm
+from django.urls import reverse_lazy
 
+#querying
+from typing import Any
+from django.db.models.query import QuerySet
+from django.db.models.query import Q
+
+#for charts
 from django.db import connection
 from django.http import JsonResponse
 from django.db.models.functions import ExtractMonth
-
 from django.db.models import Count
 from datetime import datetime
+
+#for fire incident
 from geopy.distance import geodesic
 
 class HomePageView(ListView):
     model = Locations
     context_object_name = 'home'
     template_name = "home.html"
+
+#FIREFIGHTERS
+class FirefightersList(ListView):
+     model =  Firefighters
+     context_object_name = 'firefighters' 
+     template_name = 'Firefighters/firefighters_list.html' 
+     paginate_by = 5 
+     
+     def get_queryset(self, *args, **kwargs):
+         qs = super(FirefightersList, self).get_queryset(*args, **kwargs)
+         if self.request.GET.get("q") != None: 
+             query = self.request.GET.get('q') 
+             qs = qs.filter(Q(XP_CHOICES__icontains=query) | 
+                            Q(name__icontains=query) |
+                            Q(rank__icontains=query) |
+                            Q(experience_level__icontains=query) |
+                            Q(station__icontains=query))
+         return qs 
+     
 
 class ChartView(ListView):
     template_name = 'chart.html'
