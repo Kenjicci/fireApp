@@ -14,9 +14,9 @@
     {% for message in messages %}
       // Create a new toast element
       const toastHTML = `
-      <div class="toast" role="alert" style="margin-bottom: 10px; background: sky-blue;" data-delay="3000">
+      <div class="toast" role="alert" style="margin-bottom: 10px; background-color: lightblue" data-delay="3000">
           <div class="toast-header">
-            <img src="{% static 'img/bonfire.png' %}" class="rounded mr-2" style="width: 25px; height: 25px;"alt="logo">
+            <img src="{% static 'img/alarm.png' %}" class="rounded mr-2" style="width: 25px; height: 25px;"alt="logo">
             <strong class="mr-auto">Fire App</strong>
             <small>Just now</small>
             <button type="button" class="ml-2 mb-1 close btn-close" data-bs-dismiss="toast" aria-label="Close">
