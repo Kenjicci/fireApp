@@ -515,13 +515,14 @@ class WeatherConditionsCreateView(CreateView):
     success_url = reverse_lazy('weather-conditions-list')
 
     def post(self, request, *args, **kwargs):
+        self.object = None  # Ensure self.object is set to avoid AttributeError
         temperature = request.POST.get('temperature')
         humidity = request.POST.get('humidity')
         wind_speed = request.POST.get('wind_speed')
 
         # Validate dimensions
         errors = []
-        for field_name, value in [('temperature', temperature), ('humidity', humidity), ('wind_speed', wind_speed)]:
+        for field_name, value in [('temperature', temperature), ('humidity', humidity), ('wind speed', wind_speed)]:
             try:
                 if float(value) <= 0:
                     errors.append(f"{field_name.capitalize()} must be greater than 0.")
@@ -537,13 +538,10 @@ class WeatherConditionsCreateView(CreateView):
         # Call the parent's post() if validation passes
         return super().post(request, *args, **kwargs)
 
-
-
-    # def form_valid(self, form):
-    #     incident = form.instance.incident
-    #     messages.success(self.request, f'Weather condition for incident {incident} has been added.')
-    #     return super().form_valid(form)
-
+    def form_valid(self, form, *args, **kwargs):
+        incident = form.instance.incident
+        messages.success(self.request, f'Weather condition for {incident} has been added.')
+        return super().form_valid(form)
     
 class WeatherConditionsUpdateView(UpdateView):
     model = WeatherConditions
