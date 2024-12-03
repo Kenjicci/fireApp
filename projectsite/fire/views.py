@@ -20,7 +20,7 @@ from django.db.models.functions import ExtractMonth
 from django.db.models import Count
 from datetime import datetime
 from geopy.distance import geodesic
-
+from datetime import datetime
 
 class HomePageView(ListView):
     model = Locations
@@ -270,11 +270,9 @@ class LocationUpdateView(UpdateView):
 # INCIDENT
 class IncidentListView(ListView):
     model = Incident
-    context_object_name = 'incident'
+    context_object_name = 'incidents'
     template_name = "Incident/incident_list.html"
     paginate_by = 5
-
-
     
     def get_queryset(self, *args, **kwargs):
         qs = super().get_queryset(*args, **kwargs)
@@ -295,13 +293,32 @@ class IncidentCreateView(CreateView):
     form_class = IncidentForm
     template_name = 'Incident/incident_add.html'
     success_url = reverse_lazy('incident-list')
-    
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        date_time = request.POST.get('date_time')
+        errors = []
+        
+        try:
+            if date_time:
+                input_date_time = datetime.strptime(date_time, '%Y-%m-%dT%H:%M')
+                if input_date_time > datetime.now():
+                    errors.append("Date and time cannot be in the future.")
+        except ValueError:
+            errors.append("Date and time must be a valid date-time in the format YYYY-MM-DDTHH:MM.")
+
+        if errors:
+            for error in errors:
+                messages.error(request, error)
+            return self.form_invalid(self.get_form())
+
+        return super().post(request, *args, **kwargs)
+
     def form_valid(self, form):
         incident_location_name = form.instance.location.name
-        messages.success(self.request, f'{incident_location_name} has been added')
+        messages.success(self.request, f'Incident details in {incident_location_name} has been added')
         
         return super().form_valid(form)
-    
     
 class IncidentDeleteView(DeleteView):
     model = Incident
@@ -319,12 +336,31 @@ class IncidentUpdateView(UpdateView):
     template_name = 'Incident/incident_edit.html'
     success_url = reverse_lazy('incident-list')
     
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        date_time = request.POST.get('date_time')
+        errors = []
+        
+        try:
+            if date_time:
+                input_date_time = datetime.strptime(date_time, '%Y-%m-%dT%H:%M')
+                if input_date_time > datetime.now():
+                    errors.append("Date and time cannot be in the future.")
+        except ValueError:
+            errors.append("Date and time must be a valid date-time in the format YYYY-MM-DDTHH:MM.")
+
+        if errors:
+            for error in errors:
+                messages.error(request, error)
+            return self.form_invalid(self.get_form())
+
+        return super().post(request, *args, **kwargs)
+
     def form_valid(self, form):
         incident_location_name = form.instance.location.name
-        messages.success(self.request, f'{incident_location_name} has been updated')
-
+        messages.success(self.request, f'Incident details in {incident_location_name} has been added')
+        
         return super().form_valid(form)
-
     
 # FIRE STATION
 
@@ -515,12 +551,11 @@ class WeatherConditionsCreateView(CreateView):
     success_url = reverse_lazy('weather-conditions-list')
 
     def post(self, request, *args, **kwargs):
-        self.object = None  # Ensure self.object is set to avoid AttributeError
+        self.object = None
         temperature = request.POST.get('temperature')
         humidity = request.POST.get('humidity')
         wind_speed = request.POST.get('wind_speed')
 
-        # Validate dimensions
         errors = []
         for field_name, value in [('temperature', temperature), ('humidity', humidity), ('wind speed', wind_speed)]:
             try:
@@ -529,13 +564,11 @@ class WeatherConditionsCreateView(CreateView):
             except (ValueError, TypeError):
                 errors.append(f"{field_name.capitalize()} must be a valid number.")
 
-        # If errors exist, display them and return to the form
         if errors:
             for error in errors:
                 messages.error(request, error)
             return self.form_invalid(self.get_form())
 
-        # Call the parent's post() if validation passes
         return super().post(request, *args, **kwargs)
 
     def form_valid(self, form, *args, **kwargs):
@@ -548,6 +581,27 @@ class WeatherConditionsUpdateView(UpdateView):
     form_class = WeatherConditionsForm
     template_name = 'WeatherCondition/weather_conditions_edit.html'
     success_url = reverse_lazy('weather-conditions-list')
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        temperature = request.POST.get('temperature')
+        humidity = request.POST.get('humidity')
+        wind_speed = request.POST.get('wind_speed')
+
+        errors = []
+        for field_name, value in [('temperature', temperature), ('humidity', humidity), ('wind speed', wind_speed)]:
+            try:
+                if float(value) <= 0:
+                    errors.append(f"{field_name.capitalize()} must be greater than 0.")
+            except (ValueError, TypeError):
+                errors.append(f"{field_name.capitalize()} must be a valid number.")
+
+        if errors:
+            for error in errors:
+                messages.error(request, error)
+            return self.form_invalid(self.get_form())
+
+        return super().post(request, *args, **kwargs)
     
     def form_valid(self, form):
         incident = form.instance.incident

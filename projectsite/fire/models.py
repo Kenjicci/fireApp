@@ -1,6 +1,5 @@
 from django.db import models
 
-
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -19,6 +18,9 @@ class Locations(BaseModel):
     city = models.CharField(max_length=150)  # can be in separate table
     country = models.CharField(max_length=150)  # can be in separate table
 
+    def __str__(self):
+        return f"{self.name} - {self.address} - {self.city} - {self.country}"
+
 
 class Incident(BaseModel):
     SEVERITY_CHOICES = (
@@ -31,6 +33,9 @@ class Incident(BaseModel):
     severity_level = models.CharField(max_length=45, choices=SEVERITY_CHOICES)
     description = models.CharField(max_length=250)
 
+    def __str__(self):
+        return f"{self.severity_level} in {self.location.name} on {self.date_time}"
+
 
 class FireStation(BaseModel):
     name = models.CharField(max_length=150)
@@ -41,6 +46,9 @@ class FireStation(BaseModel):
     address = models.CharField(max_length=150)
     city = models.CharField(max_length=150)  # can be in separate table
     country = models.CharField(max_length=150)  # can be in separate table
+
+    def __str__(self):
+        return f"{self.name} - {self.city}, {self.country}"
 
 
 class Firefighters(BaseModel):
@@ -58,12 +66,18 @@ class Firefighters(BaseModel):
     station = models.CharField(
         max_length=45, null=True, blank=True)
 
+    def __str__(self):
+        return f"{self.rank} {self.name} - {self.experience_level}"
+
 
 class FireTruck(BaseModel):
     truck_number = models.CharField(max_length=150)
     model = models.CharField(max_length=150)
     capacity = models.CharField(max_length=150)  # water
     station = models.ForeignKey(FireStation, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Truck {self.truck_number} ({self.model}) at {self.station.name}"
 
 
 class WeatherConditions(BaseModel):
@@ -72,3 +86,6 @@ class WeatherConditions(BaseModel):
     humidity = models.DecimalField(max_digits=10, decimal_places=2)
     wind_speed = models.DecimalField(max_digits=10, decimal_places=2)
     weather_description = models.CharField(max_length=150)
+
+    def __str__(self):
+        return f"Weather for {self.incident} - {self.weather_description}"

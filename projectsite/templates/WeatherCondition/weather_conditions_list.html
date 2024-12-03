@@ -8,7 +8,7 @@
         <div class="card">
           <div class="card-header">
             <div class="card-title">Weather Conditions</div>
-            <div class="card-category">Input the appropriate weather condition.</div>
+            <div class="card-category">Manage weather conditions details here.</div>
           </div>
           <br />
           <div class="col-md-12 row">
@@ -45,7 +45,7 @@
               <tbody>
                 {% for object in object_list %}
                 <tr>
-                  <td>{{ object.incident }}</td>
+                  <td>{{ object.incident.severity_level}} in {{object.incident.location.name}}</td>
                   <td>{{ object.temperature }}</td>
                   <td>{{ object.humidity }}</td>
                   <td>{{ object.wind_speed }}</td>

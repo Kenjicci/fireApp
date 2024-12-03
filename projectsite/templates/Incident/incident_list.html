@@ -27,7 +27,7 @@
             </div>
             <div class="col-md-6">
               <div class="pull-right">
-                <a href="{% url 'incident-add' %}" class="btn btn-success btn-rounded">Add Location</a>
+                <a href="{% url 'incident-add' %}" class="btn btn-success btn-rounded">Add Incident</a>
               </div>
             </div>
           </div>
@@ -43,7 +43,7 @@
                 </tr>
               </thead>
               <tbody>
-                {% for incident in incident %}
+                {% for incident in incidents %}
                 <tr>
                   <td>{{ incident.location.name }}</td> 
                   <td>{{ incident.date_time }}</td> 
