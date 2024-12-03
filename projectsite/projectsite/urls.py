@@ -6,7 +6,7 @@ from fire.views import (
     HomePageView, ChartView, PieCountbySeverity, LineCountbyMonth, MultilineIncidentTop3Country, multipleBarbySeverity,
     LocationListView, LocationCreateView, LocationUpdateView, LocationDeleteView, 
     IncidentListView, IncidentCreateView, IncidentUpdateView, IncidentDeleteView,
-    FireStationListView, FireStationCreateView, FireStationDeleteView,
+    FireStationListView, FireStationCreateView, FireStationDeleteView, FireStationUpdateView,
     FirefightersList, FirefightersCreateView, FirefightersUpdateView, FirefightersDeleteView,
     FireTruckList, FireTruckCreateView, FireTruckUpdateView, FireTruckDeleteView,
     WeatherConditionsList, WeatherConditionsCreateView, WeatherConditionsUpdateView, WeatherConditionsDeleteView
@@ -40,12 +40,13 @@ urlpatterns = [
     path('firestation-list/', FireStationListView.as_view(), name='firestation-list'),
     path('firestation-list/add/', FireStationCreateView.as_view(), name='firestation-add'),
     path('firestation-list/<int:pk>/delete/', FireStationDeleteView.as_view(), name='firestation-delete'),
+    path('firestation-list/<int:pk>/', FireStationUpdateView.as_view(), name='firestation-update'),
 
     #firefighters
     path('firefighters-list/', FirefightersList.as_view(), name='firefighters-list'),
     path('firefighters-list/add/', FirefightersCreateView.as_view(), name='firefighters-add'),
     path('firefighters-list/<pk>/', FirefightersUpdateView.as_view(), name='firefighters-update'),
-    path('firefighters-list/<pk>/delete', FirefightersDeleteView.as_view(), name='firefighters-delete'),
+    path('firefighters-list/<pk>/delete/', FirefightersDeleteView.as_view(), name='firefighters-delete'),
 
     #fire trucks
     path('firetruck-list/', FireTruckList.as_view(), name='firetruck-list'),

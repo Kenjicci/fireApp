@@ -355,8 +355,8 @@ class FireStationCreateView(CreateView):
     
     
 class FireStationDeleteView(DeleteView):
-    model = Incident
-    template_name = 'Fire Station/ifirestation_del.html'
+    model = FireStation
+    template_name = 'Fire Station/firestation_del.html'
     success_url = reverse_lazy('firestation-list')
 
     def form_valid(self, form):

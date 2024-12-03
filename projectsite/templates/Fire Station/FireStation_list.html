@@ -44,7 +44,7 @@
                 </tr>
               </thead>
               <tbody>
-                {% for firestation in firestation %}
+                {% for firestation in firestations %}
                 <tr>
                   <td>{{ firestation.name }}</td>
                   <td>{{ firestation.latitude }}</td>
@@ -53,8 +53,9 @@
                   <td>{{ firestation.city }}</td>
                   <td>{{ firestation.country }}</td>
                   <td>
-                    <a href="location-list/{{ firestation.id }}">Edit</a>
-                    <a href="location-list/{{ firestation.id }}/delete" class="text-danger">Delete</a>
+                    <a href="{% url 'firestation-update' firestation.pk %}">Edit</a>
+                    <a href="{% url 'firestation-delete' firestation.pk %}" class="text-danger">Delete</a>
+
                   </td>
                 </tr>
                 {% empty %}
