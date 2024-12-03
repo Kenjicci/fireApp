@@ -10,6 +10,9 @@ from fire.forms import LocationsForm, IncidentForm, FireStationForm, Firefighter
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.shortcuts import render
+from django.views.generic.list import ListView
+from .models import Locations, Incident, FireStation
+
 #charts
 from django.db import connection
 from django.http import JsonResponse
@@ -211,14 +214,14 @@ def MapIncidentView(request):
 
 # LOCATION
 
-class LocationList(ListView):
+class LocationListView(ListView):
     model = Locations
     context_object_name = 'location'
     template_name = "Locations/location_list.html"
     paginate_by = 5
     
     def get_queryset(self, *args, **kwargs):
-        qs = super(LocationList, self).get_queryset(*args, **kwargs)
+        qs = super(LocationListView, self).get_queryset(*args, **kwargs)
         if self.request.GET.get("q") != None:
             query = self.request.GET.get("q")
             qs = qs.filter(Q(name__icontains=query) |
@@ -262,6 +265,129 @@ class LocationUpdateView(UpdateView):
         messages.success(self.request, f'{location_name} has been updated')
 
         return super().form_valid(form)
+    
+    
+# INCIDENT
+class IncidentListView(ListView):
+    model = Incident
+    context_object_name = 'incident'
+    template_name = "Incident/incident_list.html"
+    paginate_by = 5
+
+
+    
+    def get_queryset(self, *args, **kwargs):
+        qs = super().get_queryset(*args, **kwargs)
+        
+        if self.request.GET.get("q") is not None:
+            query = self.request.GET.get("q")
+            qs = qs.filter(
+                Q(Location__location__icontains=query) |
+                Q(date_time__icontains=query) |
+                Q(severity_level__icontains=query) |
+                Q(description__icontains=query)
+            )
+        
+        return qs
+    
+class IncidentCreateView(CreateView):
+    model = Incident
+    form_class = IncidentForm
+    template_name = 'Incident/incident_add.html'
+    success_url = reverse_lazy('incident-list')
+    
+    def form_valid(self, form):
+        incident_location_name = form.instance.location.name
+        messages.success(self.request, f'{incident_location_name} has been added')
+        
+        return super().form_valid(form)
+    
+    
+class IncidentDeleteView(DeleteView):
+    model = Incident
+    template_name = 'Incident/incident_del.html'
+    success_url = reverse_lazy('incident-list')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Delete successfully. ')
+        return super().form_valid(form)
+    
+    
+class IncidentUpdateView(UpdateView):
+    model = Incident
+    form_class = IncidentForm
+    template_name = 'Incident/incident_edit.html'
+    success_url = reverse_lazy('incident-list')
+    
+    def form_valid(self, form):
+        incident_location_name = form.instance.location.name
+        messages.success(self.request, f'{incident_location_name} has been updated')
+
+        return super().form_valid(form)
+
+    
+# FIRE STATION
+
+class FireStationListView(ListView):
+    model = FireStation
+    context_object_name = 'firestations' 
+    template_name = 'Fire Station/firestation_list.html' 
+    paginate_by = 5
+
+    def get_queryset(self):
+        queryset = FireStation.objects.all()
+        query = self.request.GET.get('q')
+        if query:
+            queryset = queryset.filter(name__icontains=query)
+        return queryset
+            
+class FireStationCreateView(CreateView):
+    model = FireStation
+    form_class = FireStationForm
+    template_name = 'Fire Station/firestation_add.html'
+    success_url = reverse_lazy('firestation-list')
+    
+    def form_valid(self, form):
+        firestation_name = form.instance.name
+        messages.success(self.request, f'{firestation_name} has been added')
+        
+        return super().form_valid(form)
+    
+    
+class FireStationDeleteView(DeleteView):
+    model = Incident
+    template_name = 'Fire Station/ifirestation_del.html'
+    success_url = reverse_lazy('firestation-list')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Delete successfully. ')
+        return super().form_valid(form)
+    
+    
+class FireStationUpdateView(UpdateView):
+    model = FireStation
+    form_class = FireStationForm
+    template_name = 'Fire Station/firestation_edit.html'
+    success_url = reverse_lazy('firestation-list')
+
+    def form_valid(self, form):
+        firestation_name = form.instance.name
+        messages.success(self.request, f'{firestation_name} has been updated')
+
+        return super().form_valid(form)
+    
+            
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     
 #FIREFIGHTERS
 class FirefightersList(ListView):

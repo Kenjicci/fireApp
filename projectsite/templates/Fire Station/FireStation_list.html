@@ -8,12 +8,12 @@
         <div class="card">
           <div class="card-header">
             <div class="card-title">List of Fire Stations</div>
-            <div class="card-category">Fire Stations - </div>
+            <div class="card-category">Fire Stations </div>
           </div>
           <br />
           <div class="col-md-12 row">
             <div class="col-md-6">
-              <form class="navbar-left navbar-form nav-search mr-md-3" action="{% url 'FireStation-list' %}">
+              <form class="navbar-left navbar-form nav-search mr-md-3" action="{% url 'firestation-list' %}">
                 <div class="input-group">
                   <input type="text" placeholder="Search ..." class="form-control" name="q" />
                   <div class="input-group-append">
@@ -26,7 +26,7 @@
             </div>
             <div class="col-md-6">
               <div class="pull-right">
-                <a href="{% url 'FireStation-add' %}" class="btn btn-success btn-rounded">Add Location</a>
+                <a href="{% url 'firestation-add' %}" class="btn btn-success btn-rounded">Add</a>
               </div>
             </div>
           </div>
@@ -35,22 +35,32 @@
               <thead>
                 <tr>
                   <th scope="col">Name</th>
+                  <th scope="col">Latitude</th>
+                  <th scope="col">Longitude</th>
+                  <th scope="col">Address</th>
+                  <th scope="col">City</th>
+                  <th scope="col">Country</th>
                   <th scope="col">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {% for object in object_list %}
+                {% for firestation in firestation %}
                 <tr>
-                  <td>{{ object.name }}</td>
+                  <td>{{ firestation.name }}</td>
+                  <td>{{ firestation.latitude }}</td>
+                  <td>{{ firestation.longitude }}</td>
+                  <td>{{ firestation.address }}</td>
+                  <td>{{ firestation.city }}</td>
+                  <td>{{ firestation.country }}</td>
                   <td>
-                    <a href="FireStation-list/{{ object.id }}">Edit</a>
-                    <a href="FireStation-list/{{ object.id }}/delete" class="text-danger">Delete</a>
+                    <a href="location-list/{{ firestation.id }}">Edit</a>
+                    <a href="location-list/{{ firestation.id }}/delete" class="text-danger">Delete</a>
                   </td>
                 </tr>
                 {% empty %}
                 <tr>
-                  <td colspan="4" style="text-align: center">
-                    <p class="text-sm font-wight-bold mb-0">No Records Found</p>
+                  <td colspan="7" style="text-align: center">
+                    <p class="text-sm font-weight-bold mb-0">No Records Found</p>
                   </td>
                 </tr>
                 {% endfor %}

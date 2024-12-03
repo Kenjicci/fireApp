@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block content %}
 <div class="content">
   <div class="container-fluid">
@@ -13,7 +14,7 @@
           <br />
           <div class="col-md-12 row">
             <div class="col-md-6">
-              <form class="navbar-left navbar-form nav-search mr-md-3" action="{% url 'incident-list' %}">
+              <form class="navbar-left navbar-form nav-search mr-md-3" action="{% url 'firestation-list' %}">
                 <div class="input-group">
                   <input type="text" placeholder="Search ..." class="form-control" name="q" />
                   <div class="input-group-append">
@@ -26,7 +27,7 @@
             </div>
             <div class="col-md-6">
               <div class="pull-right">
-                <a href="{% url 'incident-add' %}" class="btn btn-success btn-rounded">Add Incident</a>
+                <a href="{% url 'incident-add' %}" class="btn btn-success btn-rounded">Add Location</a>
               </div>
             </div>
           </div>
@@ -34,17 +35,23 @@
             <table class="table table-striped mt-3">
               <thead>
                 <tr>
-                  <th scope="col">Name</th>
+                  <th scope="col">Location</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Severity</th>
                   <th scope="col">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {% for object in object_list %}
+                {% for incident in incident %}
                 <tr>
-                  <td>{{ object.name }}</td>
+                  <td>{{ incident.location.name }}</td> 
+                  <td>{{ incident.date_time }}</td> 
+                  <td>{{ incident.description }}</td>
+                  <td>{{ incident.severity_level }}</td>
                   <td>
-                    <a href="incident-list/{{ object.id }}">Edit</a>
-                    <a href="incident-list/{{ object.id }}/delete" class="text-danger">Delete</a>
+                    <a href="{% url 'incident-update' incident.id %}">Edit</a>
+                    <a href="{% url 'incident-delete' incident.id %}" class="text-danger">Delete</a>
                   </td>
                 </tr>
                 {% empty %}
