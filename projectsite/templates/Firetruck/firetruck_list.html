@@ -26,7 +26,7 @@
             </div>
             <div class="col-md-6">
               <div class="pull-right">
-                <a href="#" class="btn btn-success btn-rounded">Add Fire Truck</a>
+                <a href="{% url 'firetruck-add' %}" class="btn btn-success btn-rounded">Add Fire Truck</a>
               </div>
             </div>
           </div>
@@ -49,8 +49,8 @@
                   <td>{{ object.capacity }}</td>
                   <td>{{ object.station }}</td>
                   <td>
-                    <a href="#">Edit</a>
-                    <a href="#" class="text-danger">Delete</a>
+                    <a href="{% url 'firetruck-update' object.id %}">Edit</a>
+                    <a href="{% url 'firetruck-delete' object.id %}" class="text-danger">Delete</a>
                   </td>
                 </tr>
                 {% empty %}

@@ -26,7 +26,7 @@
             </div>
             <div class="col-md-6">
               <div class="pull-right">
-                <a href="#" class="btn btn-success btn-rounded">Add Weather Condition</a>
+                <a href="{% url 'weather-conditions-add' %}" class="btn btn-success btn-rounded">Add Weather Condition</a>
               </div>
             </div>
           </div>
@@ -51,8 +51,8 @@
                   <td>{{ object.wind_speed }}</td>
                   <td>{{ object.weather_description }}</td>
                   <td>
-                    <a href="#">Edit</a>
-                    <a href="#" class="text-danger">Delete</a>
+                    <a href="{% url 'weather-conditions-update' object.id %}">Edit</a>
+                    <a href="{% url 'weather-conditions-delete' object.id %}" class="text-danger">Delete</a>
                   </td>
                 </tr>
                 {% empty %}

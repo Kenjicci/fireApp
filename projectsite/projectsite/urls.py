@@ -5,8 +5,8 @@ from fire.views import (
     HomePageView, ChartView, PieCountbySeverity, LineCountbyMonth, MultilineIncidentTop3Country, multipleBarbySeverity,
     LocationList, LocationCreateView, LocationUpdateView, LocationDeleteView,
     FirefightersList, FirefightersCreateView, FirefightersUpdateView, FirefightersDeleteView,
-    FireTruckList,
-    WeatherConditionsList,
+    FireTruckList, FireTruckCreateView, FireTruckUpdateView, FireTruckDeleteView,
+    WeatherConditionsList, WeatherConditionsCreateView, WeatherConditionsUpdateView, WeatherConditionsDeleteView,
 )
 from fire import views
 
@@ -35,8 +35,13 @@ urlpatterns = [
 
     #fire trucks
     path('firetruck-list/', FireTruckList.as_view(), name='firetruck-list'),
+    path('firetruck-list/add', FireTruckCreateView.as_view(), name='firetruck-add'),
+    path('firetruck-list/<pk>/', FireTruckUpdateView.as_view(), name='firetruck-update'),
+    path('firetruck/<pk>/delete', FireTruckDeleteView.as_view(), name='firetruck-delete'),
 
     #weather conditions
     path('weather-conditions-list/', WeatherConditionsList.as_view(), name='weather-conditions-list'),
-
+    path('weather-conditions-list/add', WeatherConditionsUpdateView.as_view(), name='weather-conditions-add'),
+    path('weather-conditions-list/<pk>/', WeatherConditionsUpdateView.as_view(), name='weather-conditions-update'),
+    path('weather-conditions/<pk>/delete', WeatherConditionsDeleteView.as_view(), name='weather-conditions-delete'),
 ]

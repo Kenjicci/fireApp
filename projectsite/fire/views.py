@@ -329,7 +329,41 @@ class FireTruckList(ListView):
                             Q(capacity=query) |
                             Q(station=query))
          return qs
-     
+
+class FireTruckCreateView(CreateView):
+    model = FireTruck
+    form_class = FireTruckForm
+    template_name = 'Firetruck/firetruck_add.html'
+    success_url = reverse_lazy('firetruck-list')
+    
+    def form_valid(self, form):
+        firetruck_number = form.instance.truck_number
+        firetruck_station = form.instance.station
+        messages.success(self.request, f'{firetruck_number} has been listed to {firetruck_station}. ')
+        
+        return super().form_valid(form)
+    
+class FireTruckUpdateView(UpdateView):
+    model = FireTruck
+    form_class = FireTruckForm
+    template_name = 'Firetruck/firetruck_edit.html'
+    success_url = reverse_lazy('firetruck-list')
+    
+    def form_valid(self, form):
+        firetruck_number = form.instance.truck_number
+        messages.success(self.request, f'Truck Number {firetruck_number} has been updated. ')
+
+        return super().form_valid(form)
+    
+class FireTruckDeleteView(DeleteView):
+    model = FireTruck
+    template_name = 'Firetruck/firetruck_del.html'
+    success_url = reverse_lazy('firetruck-list')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Deleted successfully. ')
+        return super().form_valid(form)
+    
 #Weather Condition
 class WeatherConditionsList(ListView):
      model =  WeatherConditions
@@ -347,3 +381,80 @@ class WeatherConditionsList(ListView):
                             Q(wind_speed=query) |
                             Q(weather_description=query))
          return qs
+
+class WeatherConditionsCreateView(CreateView):
+    model = WeatherConditions
+    form_class = WeatherConditionsForm
+    template_name = 'WeatherConditions/weather_conditions_add.html'
+    success_url = reverse_lazy('weather-conditions-list')
+
+    def post(self, request, *args, **kwargs):
+        temperature = request.POST.get('temperature')
+        humidity = request.POST.get('humidity')
+        wind_speed = request.POST.get('wind_speed')
+
+        errors = []
+        for field_name, value in [('temperature', temperature), ('humidity', humidity), ('wind_speed', wind_speed)]:
+            try:
+                if float(value) <= 0:
+                    errors.append(f"{field_name.capitalize()} must be greater than 0.")
+            except (ValueError, TypeError):
+                errors.append(f"{field_name.capitalize()} must be a valid number.")
+
+        if errors:
+            for error in errors:
+                messages.error(request, error)
+            return self.form_invalid(self.get_form())
+
+        return super().post(request, *args, **kwargs)
+
+    
+    def form_valid(self, form):
+        incident = form.instance.incident
+        messages.success(self.request, f'Weather condition for incident {incident} has been added.')
+        
+        return super().form_valid(form)
+    
+class WeatherConditionsUpdateView(UpdateView):
+    model = WeatherConditions
+    form_class = WeatherConditionsForm
+    template_name = 'WeatherCondition/weather_conditions_edit.html'
+    success_url = reverse_lazy('weather-conditions-list')
+
+    def post(self, request, *args, **kwargs):
+        temperature = request.POST.get('temperature')
+        humidity = request.POST.get('humidity')
+        wind_speed = request.POST.get('wind_speed')
+
+        errors = []
+        for field_name, value in [('temperature', temperature), ('humidity', humidity), ('wind_speed', wind_speed)]:
+            try:
+                if float(value) <= 0:
+                    errors.append(f"{field_name.capitalize()} must be greater than 0.")
+            except (ValueError, TypeError):
+                errors.append(f"{field_name.capitalize()} must be a valid number.")
+
+        if errors:
+            for error in errors:
+                messages.error(request, error)
+            return self.form_invalid(self.get_form())
+
+        return super().post(request, *args, **kwargs)
+
+    
+    def form_valid(self, form):
+        incident = form.instance.incident
+        messages.success(self.request, f'Weather condition for incident {incident} has been updated.')
+        
+        return super().form_valid(form)
+    
+class WeatherConditionsDeleteView(DeleteView):
+    model = WeatherConditions
+    form_class = WeatherConditionsForm
+    template_name = 'WeatherCondition/weather_conditions_edit.html'
+    success_url = reverse_lazy('weather-conditions-list')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Deleted successfully. ')
+        return super().form_valid(form)
+    

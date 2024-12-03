@@ -17,7 +17,6 @@ class IncidentForm(ModelForm):
             'date_time': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
 
-
 class FireStationForm(ModelForm):
     class Meta:
         model = FireStation
