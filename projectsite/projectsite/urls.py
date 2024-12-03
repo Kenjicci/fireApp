@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import path
 
 from fire.views import (
     HomePageView, ChartView, PieCountbySeverity, LineCountbyMonth, MultilineIncidentTop3Country, multipleBarbySeverity,
@@ -41,7 +41,8 @@ urlpatterns = [
 
     #weather conditions
     path('weather-conditions-list/', WeatherConditionsList.as_view(), name='weather-conditions-list'),
-    path('weather-conditions-list/add', WeatherConditionsUpdateView.as_view(), name='weather-conditions-add'),
+    path('weather-conditions-list/add', WeatherConditionsCreateView.as_view(), name='weather-conditions-add'),
     path('weather-conditions-list/<pk>/', WeatherConditionsUpdateView.as_view(), name='weather-conditions-update'),
     path('weather-conditions/<pk>/delete', WeatherConditionsDeleteView.as_view(), name='weather-conditions-delete'),
+
 ]

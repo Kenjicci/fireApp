@@ -385,7 +385,7 @@ class WeatherConditionsList(ListView):
 class WeatherConditionsCreateView(CreateView):
     model = WeatherConditions
     form_class = WeatherConditionsForm
-    template_name = 'WeatherConditions/weather_conditions_add.html'
+    template_name = 'WeatherCondition/weather_conditions_add.html'
     success_url = reverse_lazy('weather-conditions-list')
 
     def post(self, request, *args, **kwargs):
@@ -393,6 +393,7 @@ class WeatherConditionsCreateView(CreateView):
         humidity = request.POST.get('humidity')
         wind_speed = request.POST.get('wind_speed')
 
+        # Validate dimensions
         errors = []
         for field_name, value in [('temperature', temperature), ('humidity', humidity), ('wind_speed', wind_speed)]:
             try:
@@ -401,46 +402,28 @@ class WeatherConditionsCreateView(CreateView):
             except (ValueError, TypeError):
                 errors.append(f"{field_name.capitalize()} must be a valid number.")
 
+        # If errors exist, display them and return to the form
         if errors:
             for error in errors:
                 messages.error(request, error)
             return self.form_invalid(self.get_form())
 
+        # Call the parent's post() if validation passes
         return super().post(request, *args, **kwargs)
 
-    
-    def form_valid(self, form):
-        incident = form.instance.incident
-        messages.success(self.request, f'Weather condition for incident {incident} has been added.')
-        
-        return super().form_valid(form)
+
+
+    # def form_valid(self, form):
+    #     incident = form.instance.incident
+    #     messages.success(self.request, f'Weather condition for incident {incident} has been added.')
+    #     return super().form_valid(form)
+
     
 class WeatherConditionsUpdateView(UpdateView):
     model = WeatherConditions
     form_class = WeatherConditionsForm
     template_name = 'WeatherCondition/weather_conditions_edit.html'
     success_url = reverse_lazy('weather-conditions-list')
-
-    def post(self, request, *args, **kwargs):
-        temperature = request.POST.get('temperature')
-        humidity = request.POST.get('humidity')
-        wind_speed = request.POST.get('wind_speed')
-
-        errors = []
-        for field_name, value in [('temperature', temperature), ('humidity', humidity), ('wind_speed', wind_speed)]:
-            try:
-                if float(value) <= 0:
-                    errors.append(f"{field_name.capitalize()} must be greater than 0.")
-            except (ValueError, TypeError):
-                errors.append(f"{field_name.capitalize()} must be a valid number.")
-
-        if errors:
-            for error in errors:
-                messages.error(request, error)
-            return self.form_invalid(self.get_form())
-
-        return super().post(request, *args, **kwargs)
-
     
     def form_valid(self, form):
         incident = form.instance.incident
@@ -450,8 +433,7 @@ class WeatherConditionsUpdateView(UpdateView):
     
 class WeatherConditionsDeleteView(DeleteView):
     model = WeatherConditions
-    form_class = WeatherConditionsForm
-    template_name = 'WeatherCondition/weather_conditions_edit.html'
+    template_name = 'WeatherCondition/weather_conditions_del.html'
     success_url = reverse_lazy('weather-conditions-list')
 
     def form_valid(self, form):
