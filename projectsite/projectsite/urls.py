@@ -20,7 +20,7 @@ urlpatterns = [
     path('chart/', PieCountbySeverity, name="chart"),
     path('lineChart/', LineCountbyMonth, name='chart'),
     path('multilineChart/', MultilineIncidentTop3Country, name='chart'),
-    path('multibarChart/', multipleBarbySeverity, name='chart'),
+    path('multipleBarChart/', multipleBarbySeverity, name='chart'),
     path('stations', views.map_station, name='map-station'),
     path('map_incident/', views.MapIncidentView, name='map-incident'),
     

@@ -335,8 +335,8 @@
       .catch((error) => console.error("Error:", error));
 
 
-//   multiBarChart  
-    fetch("/multibarChart/") 
+//   multiplebarChart  
+   fetch("/multipleBarChart/") 
       .then((response) => response.json()) 
       .then((result) => { 
         var severitylevel = Object.keys(result); 
@@ -427,8 +427,9 @@
           }, 
         }); 
       })
-      .catch((error) => console.error("Error:", error)); 
-    }
+      .catch((error) => console.error("Error:", error));
+    
+  }
   loadChartData();
 
     //var lineChart = document.getElementById("lineChart").getContext("2d"),

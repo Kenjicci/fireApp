@@ -1,6 +1,5 @@
 #querying
 from typing import Any
-from django.db.models.query import QuerySet
 from django.db.models.query import Q
 #views
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -10,16 +9,10 @@ from fire.forms import LocationsForm, IncidentForm, FireStationForm, Firefighter
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.shortcuts import render
-from django.views.generic.list import ListView
-from .models import Locations, Incident, FireStation
 
 #charts
 from django.db import connection
 from django.http import JsonResponse
-from django.db.models.functions import ExtractMonth
-from django.db.models import Count
-from datetime import datetime
-from geopy.distance import geodesic
 from datetime import datetime
 
 class HomePageView(ListView):
@@ -156,8 +149,10 @@ def multipleBarbySeverity(request):
         COUNT(fi.id) AS incident_count 
     FROM  
         fire_incident fi 
+    WHERE 
+        fi.date_time IS NOT NULL 
     GROUP BY fi.severity_level, month 
-    ''' 
+    '''
  
     with connection.cursor() as cursor: 
         cursor.execute(query) 
