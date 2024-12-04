@@ -336,7 +336,7 @@
 
 
 //   multiBarChart  
-    fetch("/multiBarChart/") 
+    fetch("/multibarChart/") 
       .then((response) => response.json()) 
       .then((result) => { 
         var severitylevel = Object.keys(result); 
@@ -375,8 +375,7 @@
         new Chart(multipleBarChart, { 
           type: "bar", 
           data: { 
-            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", 
-"Nov", "Dec"], 
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"], 
             datasets: [ 
               { 
                 label: "Minor Fire", 
@@ -429,8 +428,7 @@
         }); 
       })
       .catch((error) => console.error("Error:", error)); 
-
-  } 
+    }
   loadChartData();
 
     //var lineChart = document.getElementById("lineChart").getContext("2d"),
@@ -666,7 +664,6 @@
       }, 
     }, 
   }); 
- 
   // var myMultipleLineChart = new Chart(multipleLineChart, { 
   //   type: "line", 
   //   data: { 
@@ -880,7 +877,7 @@
         ticks: { 
               fontColor: "rgba(0,0,0,0.5)", 
               fontStyle: "500",
-              beginAtZero: fals, 
+              beginAtZero: false, 
               maxTicksLimit: 5,
               padding: 20,
             }, 
